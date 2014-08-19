@@ -24,6 +24,14 @@
   		<groupId>junit</groupId>
   		<artifactId>junit</artifactId>
   		<version>4.12-beta-1</version>
+  		<scope>test</scope>
+  	</dependency>
+  	<dependency>
+  		<groupId>com.pholser</groupId>
+  		<artifactId>junit-quickcheck</artifactId>
+  		<version>0.4-beta-1</version>
+  		<type>pom</type>
+  		<scope>test</scope>
   	</dependency>
   </dependencies>
 </project>
