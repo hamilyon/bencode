@@ -10,7 +10,7 @@ import java.util.Set;
 public abstract class BencodeSer {
 	private BencodeSer() { }
 	
-	private static byte[] serialize(Object object) {
+	public static byte[] serialize(Object object) {
 		if (object instanceof Integer) {
 			return serializeInteger((Integer) object);
 		} else if (object instanceof String) {
@@ -42,11 +42,11 @@ public abstract class BencodeSer {
 		return ArrayUtil.concatAll(result);
 	}
 
-	public static byte[] serializeMap(Map map) {
+	public static <K,V> byte[] serializeMap(Map<K,V> map) {
 		List<byte[]> result = new ArrayList<byte[]>();
 		result.add("d".getBytes());
-		Set<Entry> entrySet = map.entrySet();
-		for (Entry entry : entrySet) {
+		Set<Entry<K,V>> entrySet = map.entrySet();
+		for (Entry<K, V> entry : entrySet) {
 			result.add(serialize(entry.getKey()));
 			result.add(serialize(entry.getValue()));			
 		}
