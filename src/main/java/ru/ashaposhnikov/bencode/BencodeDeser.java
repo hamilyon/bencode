@@ -11,23 +11,12 @@ public abstract class BencodeDeser {
 
 	private BencodeDeser() { }
 	
-//	public static Object deserialize(byte[] bytes) {
-//		if (bytes[0] == 'i') {
-//			int end = getIntegerEnd(bytes, 0);
-//			return deserializeInteger(bytes, 0, end);
-//		} else if (bytes[0] > '0' && bytes[0] < (byte) '9') {
-//			return deserializeString(bytes);
-//		} else if (bytes[0] == 'l') {
-//			return deserializeList(bytes);
-//		}
-//	}
-	
 	public static Object deserialize(byte[] bytes) {
 		return deserialize(PeekingIterator.peekingIterator(emitTokens(bytes).iterator()));
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public static Object deserialize(PeekingIterator<Token> iterator) {
+	private static Object deserialize(PeekingIterator<Token> iterator) {
 		ParserState state = ParserState.START;
 		List currentList = null;
 		Map currentMap = null;
@@ -103,9 +92,8 @@ public abstract class BencodeDeser {
 							i = i + 1;						
 							return new Token(BencodeTokenType.VALUE_END, null);
 						}
-						System.out.println("incorrect token start: '" + new String(Arrays.copyOfRange(bytes, i, bytes.length)));
 						throw new IllegalArgumentException(
-								"iteration should have been stopped by now");
+							"Incorrect token start: '" + new String(Arrays.copyOfRange(bytes, i, bytes.length)));
 					}
 					@Override
 					public void remove() {

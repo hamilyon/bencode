@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -24,15 +25,15 @@ public abstract class BencodeSer {
 		}
 	}
 
-	public static byte[] serializeInteger(Integer integer) {
+	private static byte[] serializeInteger(Integer integer) {
 		return ("i" + integer + "e").getBytes();
 	}
 
-	public static byte[] serializeString(String string) {
+	private static byte[] serializeString(String string) {
 		return (String.valueOf(string.length()) + ":" + string).getBytes();
 	}
 
-	public static byte[] serializeList(Iterable<? extends Object> list) {
+	private static byte[] serializeList(Iterable<? extends Object> list) {
 		List<byte[]> result = new ArrayList<byte[]>();
 		result.add("l".getBytes());
 		for (Object object : list) {
@@ -42,11 +43,14 @@ public abstract class BencodeSer {
 		return ArrayUtil.concatAll(result);
 	}
 
-	public static <K,V> byte[] serializeMap(Map<K,V> map) {
+	private static <V> byte[] serializeMap(Map<String, V> map) {
+		TreeMap<String, Object> sortedMap = new TreeMap<String, Object>();
+		sortedMap.putAll(map);
 		List<byte[]> result = new ArrayList<byte[]>();
 		result.add("d".getBytes());
-		Set<Entry<K,V>> entrySet = map.entrySet();
-		for (Entry<K, V> entry : entrySet) {
+		Set<Entry<String,Object>> entrySet = sortedMap.entrySet();
+
+		for (Entry<String, Object> entry : entrySet) {
 			result.add(serialize(entry.getKey()));
 			result.add(serialize(entry.getValue()));			
 		}
